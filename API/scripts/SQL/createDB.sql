@@ -120,4 +120,16 @@ INSERT INTO event (name, description, name_and_num_street, departing_point, star
 ('3ème soirée', 'Soirée un peu nulle en vrai', 'rue Godefroid, 20', 'devant la gare', current_timestamp, current_timestamp, 'cercleEco@gmail.com', 'Namur', 5000);
 
 -- Shuttle
---INSERT INTO shuttle (departure_time, event_id, destination_town, destination_zip_code) VALUES
+INSERT INTO shuttle (departure_time, event_id, destination_town, destination_zip_code) VALUES
+(current_timestamp, 1, 'Wierde', 5100),
+(current_timestamp, 1, 'Bonnine', 5021),
+(current_timestamp, 1, 'Cognelée', 5022),
+(current_timestamp, 2, 'Wierde', 5100),
+(current_timestamp, 2, 'Saint-Marc', 5003),
+(current_timestamp, 3, 'Bouge', 5004);
+
+-- Shuttle member
+INSERT INTO shuttle_member (validated, shuttle_id, partier_id) VALUES
+(true, 1, 'etu44721@henallux.be'),
+(false, 1, 'etu44108@henallux.be'),
+(false, 4, 'etu44721@henallux.be');
