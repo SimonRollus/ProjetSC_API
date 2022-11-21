@@ -23,12 +23,26 @@ module.exports.getOrganisation = async (req, res) => {
 
 module.exports.postOrganisation = async (req, res) => {
     const client = await pool.connect();
-    const body = req.body;
-    const {emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof} = body;
+    const {emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof} = req.body;
 
     try {
-        const {rows} = await OrganisationModel.postOrganisation(emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof, client);
+        await OrganisationModel.postOrganisation(emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof, client);
         res.sendStatus(201);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    } finally {
+        client.release();
+    }
+}
+
+module.exports.updateOrganisation = async (req, res) => {
+    const client = await pool.connect();
+    const {emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof} = req.body;
+
+    try {
+        await OrganisationModel.updateOrganisation(emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof, client);
+        res.sendStatus(204);
     } catch (error) {
         console.error(error);
         res.sendStatus(500);
