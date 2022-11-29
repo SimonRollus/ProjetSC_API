@@ -27,9 +27,28 @@ module.exports.getOrganizations = async (req, res) => {
     try {
         const {rows: organizations} = await OrganizationModel.getOrganizations(client);
         if (organizations !== undefined) {
+            console.log(organizations[0]);
             res.json(organizations);
         } else {
             res.sendStatus(404)
+        }
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    } finally {
+        client.release();
+    }
+}
+
+module.exports.getUniquesResponsiblesNames = async (req, res) => {
+    const client = await pool.connect();
+
+    try {
+        const {rows: responsiblesNames} = await OrganizationModel.getUniquesResponsiblesNames(client);
+        if (responsiblesNames !== undefined) {
+            res.json(responsiblesNames);
+        } else {
+            res.sendStatus(404);
         }
     } catch (error) {
         console.error(error);

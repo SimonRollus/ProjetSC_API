@@ -8,6 +8,11 @@ module.exports.getOrganizations = async (client) => {
     return await client.query(`SELECT * FROM organization`);
 }
 
+// Get des responsible names uniques
+module.exports.getUniquesResponsiblesNames = async (client) => {
+    return await client.query("SELECT DISTINCT responsibleName FROM organization");
+}
+
 module.exports.postOrganization = async (emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof, client) => {
     return await client.query(`INSERT INTO organization (emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof) 
         VALUES ($1, $2, $3, $4, $5, $6)`, [emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof]);
