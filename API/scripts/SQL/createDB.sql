@@ -10,7 +10,8 @@ DROP TABLE IF EXISTS shuttleMember CASCADE;
 -- Partie création des tables
 -- organization
 CREATE TABLE organization (
-    emailAddress varchar PRIMARY KEY,
+    id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    emailAddress varchar UNIQUE NOT NULL,
     password varchar NOT NULL,
     name varchar NOT NULL,
     responsibleName varchar NOT NULL,
@@ -27,7 +28,8 @@ CREATE TABLE town (
 
 -- Partier
 CREATE TABLE partier (
-    emailAddress varchar PRIMARY KEY,
+    id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    emailAddress varchar UNIQUE NOT NULL,
     pseudo varchar NOT NULL,
     password varchar NOT NULL,
     firstName varchar NOT NULL,
@@ -42,14 +44,14 @@ CREATE TABLE partier (
 
 -- Event
 CREATE TABLE event (
-    id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY ,
+    id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name varchar NOT NULL,
     description varchar NOT NULL,
     nameAndNumStreet varchar NOT NULL,
     departing_point varchar NOT NULL,
     startDateAndTime timestamp NOT NULL,
     endDateAndTime timestamp NOT NULL,
-    organizationId varchar REFERENCES organization(emailAddress) NOT NULL,
+    organizationId integer REFERENCES organization(id) NOT NULL,
     addressTown varchar,
     addressZipCode integer,
     FOREIGN KEY (addressTown, addressZipCode) REFERENCES town(name, zipCode)
@@ -70,7 +72,7 @@ CREATE TABLE shuttle (
 CREATE TABLE shuttleMember (
     validated boolean NOT NULL,
     shuttleId integer REFERENCES shuttle(id) DEFERRABLE INITIALLY IMMEDIATE,
-    partierId varchar REFERENCES partier(emailAddress) DEFERRABLE INITIALLY IMMEDIATE,
+    partierId integer REFERENCES partier(id) DEFERRABLE INITIALLY IMMEDIATE,
     PRIMARY KEY (shuttleId, partierId)
 );
 
@@ -84,30 +86,30 @@ INSERT INTO organization (emailAddress, password, name, responsibleName, referen
 -- Town
 INSERT INTO town ("name", zipCode) VALUES
 ('Namur', 5000),
---('Beez', 5000),
+('Beez', 5000),
 ('Belgrade', 5001),
 ('Saint-Servais', 5002),
 ('Saint-Marc', 5003),
 ('Bouge', 5004),
 ('Malonne', 5020),
---('Daussoulx', 5020),
---('Suarlée', 5020),
---('Vedrin', 5020),
---('Temploux', 5020),
---('Rhisnes', 5020),
---('Flawinne', 5020),
---('Champion', 5020),
+('Daussoulx', 5020),
+('Suarlée', 5020),
+('Vedrin', 5020),
+('Temploux', 5020),
+('Rhisnes', 5020),
+('Flawinne', 5020),
+('Champion', 5020),
 ('Bonnine', 5021),
 ('Cognelée', 5022),
 ('Marche-les-Dames', 5024),
---('Gelbressée', 5024),
+('Gelbressée', 5024),
 ('Wierde', 5100),
---('Dave', 5100),
---('Wépion', 5100),
---('Naninne', 5100),
---('Jambes', 5100),
---('Erpent', 5101),
---('Lives-sur-Meuse', 5101),
+('Dave', 5100),
+('Wépion', 5100),
+('Naninne', 5100),
+('Jambes', 5100),
+('Erpent', 5101),
+('Lives-sur-Meuse', 5101),
 ('Loyers', 5101);
 
 -- Partier
@@ -120,9 +122,9 @@ INSERT INTO partier (emailAddress, pseudo, password, firstName, lastName, phoneN
 
 -- Event
 INSERT INTO event (name, description, nameAndNumStreet, departing_point, startDateAndTime, endDateAndTime, organizationId, addressTown, addressZipCode) VALUES
-('1ère soirée', 'Soirée plutôt sympa en vrai', 'rue de Bruxelles, 31', 'En fasse de l entrée', current_timestamp, current_timestamp, 'cercleEco@gmail.com', 'Malonne', 5020),
-('2ème soirée', 'Soirée également plutôt sympa', 'rue Joseph Calozet, 19', 'sortie du parking', current_timestamp, current_timestamp, 'cercleIESN@gmail.com', 'Saint-Servais', 5002),
-('3ème soirée', 'Soirée un peu nulle en vrai', 'rue Godefroid, 20', 'devant la gare', current_timestamp, current_timestamp, 'cercleEco@gmail.com', 'Namur', 5000);
+('1ère soirée', 'Soirée plutôt sympa en vrai', 'rue de Bruxelles, 31', 'En fasse de l entrée', current_timestamp, current_timestamp, 2, 'Malonne', 5020),
+('2ème soirée', 'Soirée également plutôt sympa', 'rue Joseph Calozet, 19', 'sortie du parking', current_timestamp, current_timestamp, 1, 'Saint-Servais', 5002),
+('3ème soirée', 'Soirée un peu nulle en vrai', 'rue Godefroid, 20', 'devant la gare', current_timestamp, current_timestamp, 3, 'Namur', 5000);
 
 -- Shuttle
 INSERT INTO shuttle (departureTime, eventId, destinationTown, destinationZipCode) VALUES
@@ -135,6 +137,6 @@ INSERT INTO shuttle (departureTime, eventId, destinationTown, destinationZipCode
 
 -- Shuttle member
 INSERT INTO shuttleMember (validated, shuttleId, partierId) VALUES
-(true, 1, 'etu44721@henallux.be'),
-(false, 1, 'etu44108@henallux.be'),
-(false, 4, 'etu44721@henallux.be');
+(true, 1, 1),
+(false, 2, 1),
+(false, 4, 2);

@@ -1,6 +1,7 @@
 const pool = require('../model/database');
 const OrganizationModel = require('../model/organizationDB');
 
+/*
 module.exports.getOrganization = async (req, res) => {
     const client = await pool.connect();
     const emailAddress = req.params.emailAddress;
@@ -20,6 +21,7 @@ module.exports.getOrganization = async (req, res) => {
         client.release();
     }
 }
+*/
 
 module.exports.getOrganizations = async (req, res) => {
     const client = await pool.connect();
@@ -40,6 +42,7 @@ module.exports.getOrganizations = async (req, res) => {
     }
 }
 
+/*
 module.exports.getUniquesResponsiblesNames = async (req, res) => {
     const client = await pool.connect();
 
@@ -57,6 +60,28 @@ module.exports.getUniquesResponsiblesNames = async (req, res) => {
         client.release();
     }
 }
+*/
+
+/*
+module.exports.getOrganizationsByResponsibleName = async (req, res) => {
+    const client = pool.connect();
+    const responsibleName = req.params.responsibleName;
+
+    try {
+        const {rows: organizations} = await OrganizationModel.getOrganizationsByResponsibleName(client, responsibleName);
+        if (organizations !== undefined) {
+            res.json(responsibleName);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    } finally {
+        client.release();
+    }
+}
+*/
 
 module.exports.postOrganization = async (req, res) => {
     const client = await pool.connect();
