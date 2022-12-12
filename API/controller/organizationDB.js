@@ -1,13 +1,12 @@
 const pool = require('../model/database');
 const OrganizationModel = require('../model/organizationDB');
 
-/*
 module.exports.getOrganization = async (req, res) => {
     const client = await pool.connect();
-    const emailAddress = req.params.emailAddress;
+    const id = req.params.id;
 
     try {
-        const {rows: organizations} = await OrganizationModel.getOrganization(emailAddress, client);
+        const {rows: organizations} = await OrganizationModel.getOrganization(id, client);
         const organization = organizations[0];
         if (organization !== undefined) {
             res.json(organization);
@@ -21,7 +20,6 @@ module.exports.getOrganization = async (req, res) => {
         client.release();
     }
 }
-*/
 
 module.exports.getOrganizations = async (req, res) => {
     const client = await pool.connect();
@@ -29,10 +27,9 @@ module.exports.getOrganizations = async (req, res) => {
     try {
         const {rows: organizations} = await OrganizationModel.getOrganizations(client);
         if (organizations !== undefined) {
-            console.log(organizations[0]);
             res.json(organizations);
         } else {
-            res.sendStatus(404)
+            res.sendStatus(404);
         }
     } catch (error) {
         console.error(error);

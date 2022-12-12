@@ -11,9 +11,9 @@ DROP TABLE IF EXISTS shuttleMember CASCADE;
 -- organization
 CREATE TABLE organization (
     id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    emailAddress varchar UNIQUE NOT NULL,
+    emailAddress varchar NOT NULL,
     password varchar NOT NULL,
-    name varchar NOT NULL,
+    name varchar UNIQUE NOT NULL,
     responsibleName varchar NOT NULL,
     referencePhoneNumber varchar NOT NULL,
     administrativeProof varchar NOT NULL
