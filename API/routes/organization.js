@@ -8,6 +8,6 @@ router.get('/:id', OrganizationController.getOrganization);
 //router.get('/get/organizations/:responsibleName', OrganizationController.getOrganizationsByResponsibleName);
 router.post('/', OrganizationController.postOrganization);
 router.patch('/', OrganizationController.updateOrganization);
-router.delete('/', OrganizationController.deleteOrganization);
+router.delete('/:id', OrganizationController.deleteOrganization);
 
 module.exports = router;

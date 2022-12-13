@@ -24,13 +24,13 @@ module.exports.getOrganizationsByResponsibleName = async (client, responsibleNam
 */
 
 module.exports.postOrganization = async (emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof, client) => {
-    return await client.query(`INSERT INTO organization (emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof) 
+    return await client.query(`INSERT INTO organization (emailaddress, password, name, responsiblename, referencephonenumber, administrativeproof) 
         VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`, [emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof]);
 }
 
 
 module.exports.updateOrganization = async (id, emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof, client) => {
-    return await client.query(`UPDATE organization SET emailAddress = $2, password = $3, name = $4, responsibleName = $5, referencePhoneNumber = $6, administrativeProof = $7 
+    return await client.query(`UPDATE organization SET emailaddress = $2, password = $3, name = $4, responsiblename = $5, referencephonenumber = $6, administrativeproof = $7 
         WHERE id = $1`, [id, emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof]);
 }
 

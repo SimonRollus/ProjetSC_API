@@ -97,10 +97,10 @@ module.exports.postOrganization = async (req, res) => {
 
 module.exports.updateOrganization = async (req, res) => {
     const client = await pool.connect();
-    const {emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof} = req.body;
+    const {id, emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof} = req.body;
 
     try {
-        await OrganizationModel.updateOrganization(emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof, client);
+        await OrganizationModel.updateOrganization(id, emailAddress, password, name, responsibleName, referencePhoneNumber, administrativeProof, client);
         res.sendStatus(204);
     } catch (error) {
         console.error(error);
@@ -112,10 +112,10 @@ module.exports.updateOrganization = async (req, res) => {
 
 module.exports.deleteOrganization = async (req, res) => {
     const client = await pool.connect();
-    const {emailAddress} = req.body;
+    const id = req.params.id;
 
     try {
-        await OrganizationModel.deleteOrganization(emailAddress, client);
+        await OrganizationModel.deleteOrganization(id, client);
         res.sendStatus(204);
     } catch (error) {
         console.error(error);
