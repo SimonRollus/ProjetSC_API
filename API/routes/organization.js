@@ -1,13 +1,11 @@
-const OrganizationController = require("../controller/organizationDB");
+const OrganizationController = require("../controller/organization");
 const Router = require("express-promise-router");
 const router = new Router;
 
-router.get('/organizations', OrganizationController.getOrganizations);
-router.get('/:id', OrganizationController.getOrganization);
-//router.get('/get/responsibles', OrganizationController.getUniquesResponsiblesNames);
-//router.get('/get/organizations/:responsibleName', OrganizationController.getOrganizationsByResponsibleName);
+router.get('/all', OrganizationController.getOrganizations);
+/* router.get('/:id', OrganizationController.getOrganization);
 router.post('/', OrganizationController.postOrganization);
 router.patch('/', OrganizationController.updateOrganization);
-router.delete('/:id', OrganizationController.deleteOrganization);
+router.delete('/:id', OrganizationController.deleteOrganization); */
 
 module.exports = router;
