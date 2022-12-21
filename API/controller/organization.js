@@ -1,5 +1,6 @@
 const pool = require('../model/database');
 const OrganizationModel = require('../model/organization');
+const ImageModel = require('../model/image');
 
 module.exports.getOrganization = async (req, res) => {
     const client = await pool.connect();
@@ -25,7 +26,7 @@ module.exports.getOrganizations = async (req, res) => {
     const client = await pool.connect();
 
     try {
-        
+
         const {rows: organizations} = await OrganizationModel.getOrganizations(client);
 
         if (organizations == undefined) {
@@ -43,17 +44,22 @@ module.exports.getOrganizations = async (req, res) => {
     }
 }
 
-/*
-module.exports.getUniquesResponsiblesNames = async (req, res) => {
+module.exports.getOrganizationByEmail = async (req, res) => {
     const client = await pool.connect();
+    const email = req.params.email;
 
     try {
-        const {rows: responsiblesNames} = await OrganizationModel.getUniquesResponsiblesNames(client);
-        if (responsiblesNames !== undefined) {
-            res.json(responsiblesNames);
-        } else {
-            res.sendStatus(404);
+        const {rows: organizations} = await OrganizationModel.getOrganizationByEmail(email, client);
+
+        const organization = organizations[0];
+
+        if (organization === undefined) {
+            res.json({id : -1})
+            return;
         }
+
+        res.json(organization);
+       
     } catch (error) {
         console.error(error);
         res.sendStatus(500);
@@ -61,28 +67,6 @@ module.exports.getUniquesResponsiblesNames = async (req, res) => {
         client.release();
     }
 }
-*/
-
-/*
-module.exports.getOrganizationsByResponsibleName = async (req, res) => {
-    const client = pool.connect();
-    const responsibleName = req.params.responsibleName;
-
-    try {
-        const {rows: organizations} = await OrganizationModel.getOrganizationsByResponsibleName(client, responsibleName);
-        if (organizations !== undefined) {
-            res.json(responsibleName);
-        } else {
-            res.sendStatus(404);
-        }
-    } catch (error) {
-        console.error(error);
-        res.sendStatus(500);
-    } finally {
-        client.release();
-    }
-}
-*/
 
 module.exports.postOrganization = async (req, res) => {
     const client = await pool.connect();
@@ -127,4 +111,61 @@ module.exports.deleteOrganization = async (req, res) => {
     } finally {
         client.release();
     }
+}
+
+module.exports.emailExist = async (req, res) => {
+    const client = await pool.connect();
+    const {email} = req.body;
+
+    try {
+        const emailExist = await OrganizationModel.emailExist(email, client);
+    
+        if (emailExist === undefined) {
+            res.sendStatus(404);
+            return;
+        }
+
+        res.json(emailExist);
+
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    } finally {
+        client.release();
+    }
+}
+
+module.exports.registerOrganization = async (req, res) => {
+    const client = await pool.connect();
+    const administrativeProof = req.files.administrativeProof[0];
+    const {email, password, name, responsibleName, referencePhoneNumber} = req.body;
+
+    if (email === undefined 
+        || password === undefined 
+        || name === undefined 
+        || responsibleName === undefined 
+        || referencePhoneNumber === undefined
+        || administrativeProof === undefined) {
+        res.sendStatus(400);
+        return;
+    }
+
+    ImageModel.saveImage(administrativeProof.buffer, email, './public/proof', "pdf").then(() => {
+    }).catch((error) => {
+        console.log(error);
+        res.sendStatus(500);
+    });
+
+    
+
+    try {
+        await OrganizationModel.postOrganization(email, password, name, responsibleName, referencePhoneNumber, false, client);
+        res.sendStatus(201);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    } finally {
+        client.release();
+    }
+
 }

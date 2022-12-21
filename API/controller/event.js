@@ -42,3 +42,47 @@ module.exports.getEvents = async (req, res) => {
         client.release();
     }
 }
+
+module.exports.getEventsByTown = async (req, res) => {
+    const client = await pool.connect();
+    const town = req.params.town;
+
+    try {
+        const {rows: events} = await EventModel.getEventsByTown(town, client);
+
+        if (events == undefined) {
+            res.sendStatus(404);
+            return;
+        }
+
+        res.json(events);
+
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    } finally {
+        client.release();
+    }
+}
+
+module.exports.getEventsByOrganization = async (req, res) => {
+    const client = await pool.connect();
+    const organizationId = req.params.organizationId;
+
+    try {
+        const {rows: events} = await EventModel.getEventsByOrganization(organizationId, client);
+
+        if (events == undefined) {
+            res.sendStatus(404);
+            return;
+        }
+
+        res.json(events);
+
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    } finally {
+        client.release();
+    }
+}

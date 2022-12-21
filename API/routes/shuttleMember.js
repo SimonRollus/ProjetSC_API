@@ -4,4 +4,5 @@ const router = new Router;
 
 router.get('/all', ShuttleMemberController.getShuttleMembers);
 
+
 module.exports = router;
