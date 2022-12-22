@@ -26,8 +26,8 @@ module.exports.deleteEvent = async (id, client) => {
     return await client.query(`DELETE FROM event WHERE id = $1`, [id]);
 }
 
-module.exports.getEventsByTown = async (town, client) => {
-    return await client.query(`SELECT * FROM event WHERE addressTown = $1`, [town]);
+module.exports.getEventsByTown = async (addressTown, addressZipcode, client) => {
+    return await client.query(`SELECT * FROM event WHERE addressTown = $1 AND addressZipCode = $2`, [addressTown, addressZipcode]);
 }
 
 module.exports.getEventsByOrganization = async (organizationId, client) => {

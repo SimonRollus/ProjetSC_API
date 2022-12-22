@@ -28,7 +28,7 @@ module.exports.getEvents = async (req, res) => {
         
         const {rows: events} = await EventModel.getEvents(client);
 
-        if (events == undefined) {
+        if (events === undefined) {
             res.sendStatus(404);
             return;
         }
@@ -45,12 +45,12 @@ module.exports.getEvents = async (req, res) => {
 
 module.exports.getEventsByTown = async (req, res) => {
     const client = await pool.connect();
-    const town = req.params.town;
+    const { name, zipcode } = req.body;
 
     try {
-        const {rows: events} = await EventModel.getEventsByTown(town, client);
+        const {rows: events} = await EventModel.getEventsByTown(name, zipcode, client);
 
-        if (events == undefined) {
+        if (events === undefined) {
             res.sendStatus(404);
             return;
         }
